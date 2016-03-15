@@ -8,10 +8,13 @@
 
 import Foundation
 import UIKit
-class AddItemViewController: UITableViewController{
+class AddItemViewController: UITableViewController , UITextFieldDelegate{
     //oi
     
+   // @IBOutlet weak var textField: UITextField!
+   
     @IBOutlet weak var textField: UITextField!
+    @IBOutlet weak var doneBarButton: UIBarButtonItem!
     
     @IBAction func cancel() {
         dismissViewControllerAnimated(true, completion: nil)
@@ -33,5 +36,18 @@ class AddItemViewController: UITableViewController{
         super.viewWillAppear(animated)
         textField.becomeFirstResponder()
     }
-    
+    //Na hora precionar DONE
+    func textField(textField: UITextField,
+        shouldChangeCharactersInRange range: NSRange,
+        replacementString string: String) -> Bool {
+        let oldText: NSString = textField.text!
+        let newText: NSString = oldText.stringByReplacingCharactersInRange(
+        range, withString: string)
+        if newText.length > 0 {
+        doneBarButton.enabled = true
+    } else {
+        doneBarButton.enabled = false
+        }
+        return true
+    }
 }

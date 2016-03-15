@@ -73,6 +73,7 @@
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
                                                     <connections>
                                                         <action selector="done" destination="mKu-b1-xxz" eventType="editingDidEndOnExit" id="J7v-0S-KsC"/>
+                                                        <outlet property="delegate" destination="mKu-b1-xxz" id="kA6-Bw-pKo"/>
                                                     </connections>
                                                 </textField>
                                             </subviews>
@@ -92,7 +93,7 @@
                                 <action selector="cancel" destination="mKu-b1-xxz" id="DZc-w5-xaQ"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="3oE-Kn-156">
+                        <barButtonItem key="rightBarButtonItem" enabled="NO" style="done" systemItem="done" id="3oE-Kn-156">
                             <connections>
                                 <action selector="done" destination="mKu-b1-xxz" id="osA-OH-YhT"/>
                             </connections>
@@ -101,6 +102,8 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
                     <connections>
                         <outlet property="TextField" destination="4sy-s6-0ZQ" id="ktT-aL-XLl"/>
+                        <outlet property="doneBarButton" destination="3oE-Kn-156" id="3c7-NO-gWL"/>
+                        <outlet property="textField" destination="4sy-s6-0ZQ" id="nRd-dC-8AB"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ovg-pM-Urb" userLabel="First Responder" sceneMemberID="firstResponder"/>
