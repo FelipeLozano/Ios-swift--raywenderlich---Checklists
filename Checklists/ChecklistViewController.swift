@@ -74,10 +74,16 @@ class ChecklistViewController: UITableViewController ,AddItemViewControllerDeleg
     //Função
     func configureCheckmarkForCell(cell: UITableViewCell, withChecklistItem item: ChecklistItem) {
         //let item = items[indexPath.row]
-        if item.checked {
-            cell.accessoryType = .Checkmark
-        } else {
-            cell.accessoryType = .None
+//        if item.checked {
+//            cell.accessoryType = .Checkmark
+//        } else {
+//            cell.accessoryType = .None
+//        }
+        let label = cell.viewWithTag(1001) as! UILabel
+        if item.checked{
+            label.text = "✔️"
+        } else{
+            label.text = ""
         }
     }
     
@@ -119,11 +125,20 @@ class ChecklistViewController: UITableViewController ,AddItemViewControllerDeleg
         items.append(item)
         let indexPath = NSIndexPath(forRow: newRowIndex, inSection: 0)
         let indexPaths = [indexPath]
-        tableView.insertRowsAtIndexPaths(indexPaths,
-            withRowAnimation: .Automatic)
+        tableView.insertRowsAtIndexPaths(indexPaths, withRowAnimation: .Automatic)
         dismissViewControllerAnimated(true, completion: nil )
     }
-    //Chamar AddItemViewController para ChecklistViewController
+    //Comado AddItemViewController EDITAR
+    func addItemViewController(controller: AddItemViewController,
+            didFinishEditingItem item: ChecklistItem) {
+            if let index = items.indexOf(item) {
+            let indexPath = NSIndexPath(forRow: index, inSection: 0)
+            if let cell = tableView.cellForRowAtIndexPath(indexPath) {
+            configureTextForCell(cell, withChecklistItem: item)
+            }
+            }
+            dismissViewControllerAnimated(true, completion: nil)
+    }    //Chamar AddItemViewController para ChecklistViewController
     override func   prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
             //1
             if segue.identifier == "AddItem" {
@@ -133,7 +148,14 @@ class ChecklistViewController: UITableViewController ,AddItemViewControllerDeleg
             let controller = navigationController.topViewController as! AddItemViewController
             // 4
             controller.delegate = self
-        }
+        }else if segue.identifier == "EditItem"{
+                let navigationController = segue.destinationViewController as! UINavigationController
+                let controller = navigationController.topViewController as! AddItemViewController
+                controller.delegate = self
+                if let indexPath = tableView.indexPathForCell(sender as! UITableViewCell) {
+                    controller.itemToEdit = items[indexPath.row]
+                }
+            }
     }
     
 }

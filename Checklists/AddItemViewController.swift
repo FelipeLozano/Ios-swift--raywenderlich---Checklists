@@ -13,12 +13,14 @@ import UIKit
 protocol AddItemViewControllerDelegate: class {
     func addItemViewControllerDidCancel(controller: AddItemViewController)
     func addItemViewController(controller: AddItemViewController, didFinishAddingItem item: ChecklistItem)
+    func addItemViewController(controller: AddItemViewController, didFinishEditingItem item: ChecklistItem)
 }
 
 
 class AddItemViewController: UITableViewController , UITextFieldDelegate{
     //Variavel
     weak var delegate: AddItemViewControllerDelegate?
+    var itemToEdit: ChecklistItem?
     
    // @IBOutlet weak var textField: UITextField!
    
@@ -31,12 +33,15 @@ class AddItemViewController: UITableViewController , UITextFieldDelegate{
     }
     @IBAction func done() {
         print("Cometario do Text Field: \(textField.text!)")
-        //dismissViewControllerAnimated(true, completion: nil)
-        let item = ChecklistItem()
-        item.text = textField.text!
-        item.checked = false
-            
-        delegate?.addItemViewController(self, didFinishAddingItem: item)
+            if let item = itemToEdit {
+                item.text = textField.text!
+                delegate?.addItemViewController(self, didFinishEditingItem: item)
+            } else {
+                let item = ChecklistItem()
+                item.text = textField.text!
+                item.checked = false
+                delegate?.addItemViewController(self, didFinishAddingItem: item)
+            }
     }
     
     //Coloca linha cinza foi desabilitado
@@ -64,6 +69,16 @@ class AddItemViewController: UITableViewController , UITextFieldDelegate{
         }
         return true
     }
+    //Na hora EDITAR
+    override func viewDidLoad() {
+            super.viewDidLoad()
+            if let item = itemToEdit {
+                title = "Edit Item"
+                textField.text = item.text
+                doneBarButton.enabled = true
+            }
+    }
+    //
     
     
 }

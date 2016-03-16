@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-class ChecklistItem {
+class ChecklistItem: NSObject {
     var text = ""
     var checked = false
     func toggleChecked(){
