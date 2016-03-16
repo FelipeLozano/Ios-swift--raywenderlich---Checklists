@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ChecklistViewController: UITableViewController {
+class ChecklistViewController: UITableViewController ,AddItemViewControllerDelegate {
     var items: [ChecklistItem]
     required init?(coder aDecoder: NSCoder) {
         items = [ChecklistItem]()
@@ -89,18 +89,18 @@ class ChecklistViewController: UITableViewController {
     }
     //Botão de adicionar
     //Eu desabilitei  adicionar
-    @IBAction func addItem(){
-            
-        let newRowIndex = items.count
-        let item = ChecklistItem()
-        item.text = "Uma nova linha ."
-        item.checked = false
-        items.append(item)
-        
-        let indexPath = NSIndexPath(forItem: newRowIndex, inSection: 0)
-        let indexPaths = [indexPath]
-        tableView.insertRowsAtIndexPaths(indexPaths, withRowAnimation: .Automatic)
-    }
+//    @IBAction func addItem(){
+//            
+//        let newRowIndex = items.count
+//        let item = ChecklistItem()
+//        item.text = "Uma nova linha ."
+//        item.checked = false
+//        items.append(item)
+//        
+//        let indexPath = NSIndexPath(forItem: newRowIndex, inSection: 0)
+//        let indexPaths = [indexPath]
+//        tableView.insertRowsAtIndexPaths(indexPaths, withRowAnimation: .Automatic)
+//    }
     //Metodo Deletar
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         //1
@@ -109,5 +109,32 @@ class ChecklistViewController: UITableViewController {
         let indexPaths = [indexPath]
         tableView.deleteRowsAtIndexPaths(indexPaths, withRowAnimation: .Automatic)
     }
+    //Comando AddItemViewController  DELETAR
+    func addItemViewControllerDidCancel(controller: AddItemViewController) {
+        dismissViewControllerAnimated(true, completion: nil )
+    }
+    //Comando AddItemViewController DONE
+    func addItemViewController(controller: AddItemViewController, didFinishAddingItem item: ChecklistItem) {
+        let newRowIndex = items.count
+        items.append(item)
+        let indexPath = NSIndexPath(forRow: newRowIndex, inSection: 0)
+        let indexPaths = [indexPath]
+        tableView.insertRowsAtIndexPaths(indexPaths,
+            withRowAnimation: .Automatic)
+        dismissViewControllerAnimated(true, completion: nil )
+    }
+    //Chamar AddItemViewController para ChecklistViewController
+    override func   prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+            //1
+            if segue.identifier == "AddItem" {
+            // 2
+            let navigationController = segue.destinationViewController as! UINavigationController
+            // 3
+            let controller = navigationController.topViewController as! AddItemViewController
+            // 4
+            controller.delegate = self
+        }
+    }
+    
 }
 

@@ -8,8 +8,17 @@
 
 import Foundation
 import UIKit
+
+// Metodo protocolo
+protocol AddItemViewControllerDelegate: class {
+    func addItemViewControllerDidCancel(controller: AddItemViewController)
+    func addItemViewController(controller: AddItemViewController, didFinishAddingItem item: ChecklistItem)
+}
+
+
 class AddItemViewController: UITableViewController , UITextFieldDelegate{
-    //oi
+    //Variavel
+    weak var delegate: AddItemViewControllerDelegate?
     
    // @IBOutlet weak var textField: UITextField!
    
@@ -17,13 +26,17 @@ class AddItemViewController: UITableViewController , UITextFieldDelegate{
     @IBOutlet weak var doneBarButton: UIBarButtonItem!
     
     @IBAction func cancel() {
-        dismissViewControllerAnimated(true, completion: nil)
+        //dismissViewControllerAnimated(true, completion: nil)
+        delegate?.addItemViewControllerDidCancel(self)
     }
     @IBAction func done() {
         print("Cometario do Text Field: \(textField.text!)")
-        dismissViewControllerAnimated(true, completion: nil)
-        
-        
+        //dismissViewControllerAnimated(true, completion: nil)
+        let item = ChecklistItem()
+        item.text = textField.text!
+        item.checked = false
+            
+        delegate?.addItemViewController(self, didFinishAddingItem: item)
     }
     
     //Coloca linha cinza foi desabilitado
@@ -43,6 +56,7 @@ class AddItemViewController: UITableViewController , UITextFieldDelegate{
         let oldText: NSString = textField.text!
         let newText: NSString = oldText.stringByReplacingCharactersInRange(
         range, withString: string)
+        //doneBarButton.enabled = (newText.length > 0)
         if newText.length > 0 {
         doneBarButton.enabled = true
     } else {
@@ -50,4 +64,6 @@ class AddItemViewController: UITableViewController , UITextFieldDelegate{
         }
         return true
     }
+    
+    
 }
